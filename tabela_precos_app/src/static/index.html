@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABELA DE PREÇOS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            height: 60px;
+            filter: brightness(1.1);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .search-section, .import-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: white;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #4834d4, #686de0);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #00d2d3, #54a0ff);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border-radius: 10px;
+            cursor: pointer;
+            display: block;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px dashed #ccc;
+        }
+
+        .file-input-label:hover {
+            background: white;
+            border-color: #4834d4;
+        }
+
+        .results-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+        }
+
+        .results-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .result-model {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .result-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #ffd700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .detail-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+        }
+
+        .error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            color: #ffcccb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .success {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid rgba(0, 255, 0, 0.5);
+            color: #90ee90;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .status-info {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .logo-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .result-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <img src="logotipoMercedes.png" alt="Mercedes Logo" class="logo">
+                <img src="logo-de-nigris-60-comercial-02-BRANCO].png" alt="De Nigris Logo" class="logo">
+            </div>
+            <h1 class="title">TABELA DE PREÇOS</h1>
+            <p class="subtitle">Sistema de Consulta de Preços de Veículos</p>
+        </div>
+
+        <div class="main-content">
+            <div class="search-section">
+                <h2 class="section-title">🔍 Buscar Veículo</h2>
+                <input type="text" id="searchInput" class="search-input" placeholder="Digite o modelo, variante ou UP...">
+                <button onclick="buscarVeiculo()" class="btn btn-primary" style="width: 100%;">Buscar</button>
+            </div>
+
+            <div class="import-section">
+                <h2 class="section-title">📊 Importar Tabela</h2>
+                <div class="file-input-wrapper">
+                    <input type="file" id="fileInput" class="file-input" accept=".xlsx" onchange="uploadPlanilha()">
+                    <label for="fileInput" class="file-input-label">
+                        📁 Selecionar nova planilha (.xlsx)
+                    </label>
+                </div>
+                <button onclick="downloadTemplate()" class="btn btn-secondary" style="width: 100%;">
+                    ⬇️ Baixar Template
+                </button>
+                <div id="uploadStatus"></div>
+            </div>
+        </div>
+
+        <div class="results-section" id="resultsSection" style="display: none;">
+            <h2 class="section-title">📋 Resultados da Busca</h2>
+            <div id="resultsContainer"></div>
+        </div>
+
+        <div class="status-info" id="statusInfo">
+            <div id="statusText">Carregando informações do sistema...</div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar status do sistema ao carregar
+        window.onload = function() {
+            verificarStatus();
+        };
+
+        // Permitir busca com Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                buscarVeiculo();
+            }
+        });
+
+        async function verificarStatus() {
+            try {
+                const response = await fetch('/api/tabela/status');
+                const data = await response.json();
+                
+                const statusText = document.getElementById('statusText');
+                if (data.planilha_carregada) {
+                    statusText.innerHTML = `✅ Sistema pronto • ${data.total_registros} veículos carregados`;
+                } else {
+                    statusText.innerHTML = '❌ Nenhuma planilha carregada';
+                }
+            } catch (error) {
+                document.getElementById('statusText').innerHTML = '⚠️ Erro ao conectar com o servidor';
+            }
+        }
+
+        async function buscarVeiculo() {
+            const termo = document.getElementById('searchInput').value.trim();
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsContainer = document.getElementById('resultsContainer');
+
+            if (!termo) {
+                alert('Por favor, digite um termo para busca');
+                return;
+            }
+
+            // Mostrar loading
+            resultsSection.style.display = 'block';
+            resultsContainer.innerHTML = '<div class="loading">🔄 Buscando...</div>';
+
+            try {
+                const response = await fetch('/api/tabela/buscar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ termo: termo })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.resultados.length > 0) {
+                        exibirResultados(data.resultados);
+                    } else {
+                        resultsContainer.innerHTML = '<div class="loading">❌ Nenhum resultado encontrado</div>';
+                    }
+                } else {
+                    resultsContainer.innerHTML = `<div class="error">Erro: ${data.erro}</div>`;
+                }
+            } catch (error) {
+                resultsContainer.innerHTML = '<div class="error">Erro ao conectar com o servidor</div>';
+            }
+        }
+
+        function exibirResultados(resultados) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            let html = `<div style="margin-bottom: 20px; text-align: center; font-size: 1.1rem;">
+                          ✅ ${resultados.length} resultado(s) encontrado(s)
+                        </div>
+                        <div class="results-grid">`;
+
+            resultados.forEach(resultado => {
+                html += `
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="result-model">${resultado.modelo}</div>
+                            <div class="result-price">R$ ${formatarPreco(resultado.preco_venda)}</div>
+                        </div>
+                        <div class="result-details">
+                            <div class="detail-item">
+                                <div class="detail-label">UP:</div>
+                                <div>${resultado.up}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Variante:</div>
+                                <div>${resultado.variante}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Tabela:</div>
+                                <div>${resultado.tabela}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Ano:</div>
+                                <div>${resultado.ano}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            resultsContainer.innerHTML = html;
+        }
+
+        function formatarPreco(preco) {
+            return new Intl.NumberFormat('pt-BR').format(preco);
+        }
+
+        async function uploadPlanilha() {
+            const fileInput = document.getElementById('fileInput');
+            const uploadStatus = document.getElementById('uploadStatus');
+            const file = fileInput.files[0];
+
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('arquivo', file);
+
+            uploadStatus.innerHTML = '<div class="loading">📤 Enviando planilha...</div>';
+
+            try {
+                const response = await fetch('/api/tabela/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    uploadStatus.innerHTML = '<div class="success">✅ Planilha carregada com sucesso!</div>';
+                    verificarStatus(); // Atualizar status
+                } else {
+                    uploadStatus.innerHTML = `<div class="error">❌ ${data.erro}</div>`;
+                }
+            } catch (error) {
+                uploadStatus.innerHTML = '<div class="error">❌ Erro ao enviar planilha</div>';
+            }
+
+            // Limpar input
+            fileInput.value = '';
+        }
+
+        function downloadTemplate() {
+            window.open('/api/tabela/download-template', '_blank');
+        }
+    </script>
+</body>
+</html>
+
